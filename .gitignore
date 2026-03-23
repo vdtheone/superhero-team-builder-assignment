@@ -1,0 +1,107 @@
+# =========================
+# Operating System
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDEs and Editors
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.cursorignore
+.cursorindexingignore
+
+# =========================
+# Backend (Python/Django)
+# =========================
+backend/**/__pycache__/
+backend/**/*.py[codz]
+backend/**/*$py.class
+backend/**/*.so
+
+# logs
+backend/logs/*.log
+
+# Envs
+backend/.env
+backend/.envrc
+backend/venv/
+backend/env/
+backend/.venv/
+backend/ENV/
+backend/env.bak/
+backend/venv.bak/
+
+# Django
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/local_settings.py
+backend/media/
+backend/staticfiles/
+backend/*.log
+
+# Packaging / Build
+backend/build/
+backend/dist/
+backend/*.egg-info/
+backend/*.egg
+
+# Testing & Type Checkers
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.dmypy.json
+backend/.ruff_cache/
+backend/htmlcov/
+backend/.coverage
+backend/.coverage.*
+backend/coverage.xml
+
+# Celery
+backend/celerybeat-schedule
+backend/celerybeat.pid
+
+# Misc Python tools
+backend/.pdm-python
+backend/.pdm-build/
+backend/.pixi/
+backend/__pypackages__/
+backend/.pytype/
+backend/cython_debug/
+backend/.abstra/
+
+# =========================
+# Frontend (Node.js / Vite)
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Env files
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Logs
+frontend/logs/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# Framework specific (uncomment as needed)
+# frontend/.next/       ← Next.js
+# frontend/.nuxt/       ← Nuxt.js
+# frontend/.svelte-kit/ ← SvelteKit
+
+# Coverage
+frontend/coverage/
