@@ -25,8 +25,15 @@ A full-stack web application that allows users to explore superheroes, view deta
    python -m venv venv
    ```
 3. Activate the virtual environment:
-   *   Windows: `venv\Scripts\activate`
-   *   Mac/Linux: `source venv/bin/activate`
+
+   Windows: 
+   ```bash
+   venv\Scripts\activate
+   ```
+   Mac/Linux: 
+   ```bash
+   source venv/bin/activate
+   ```
 4. Install dependencies:
    ```bash
    pip install -r requirements.txt
