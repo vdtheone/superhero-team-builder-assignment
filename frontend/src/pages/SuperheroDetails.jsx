@@ -170,7 +170,7 @@ function SuperheroDetails() {
           {hero.image_url && (
             <div className="shrink-0">
               <img 
-                src={`http://localhost:8001/api/heroes/image-proxy/?url=${hero.image_url}`}
+                src={`http://13.235.67.104/api/heroes/image-proxy/?url=${hero.image_url}`}
                 alt={hero.name} 
                 className="w-full max-w-sm h-auto rounded-lg shadow-md bg-gray-200"
               />

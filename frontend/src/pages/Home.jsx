@@ -170,7 +170,7 @@ function Home() {
                 >
                   {hero.image_url ? (
                     <img
-                      src={`http://localhost:8001/api/heroes/image-proxy/?url=${hero.image_url}`}
+                      src={`http://13.235.67.104/api/heroes/image-proxy/?url=${hero.image_url}`}
                       alt={hero.name}
                       className="w-full h-48 object-cover bg-gray-200"
                     />
