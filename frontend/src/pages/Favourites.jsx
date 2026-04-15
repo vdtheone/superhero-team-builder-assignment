@@ -122,7 +122,7 @@ function Favourites() {
                 >
                   {hero?.image_url ? (
                     <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`}
+                      src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
                       alt={heroName}
                       className="w-full h-48 object-cover bg-gray-200"
                     />

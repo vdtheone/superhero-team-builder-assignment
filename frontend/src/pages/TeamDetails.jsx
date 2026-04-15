@@ -146,7 +146,7 @@ function TeamDetails() {
                 <div key={hero.id} className={`border rounded-lg p-3 flex flex-col items-center text-center transition-all ${inTeam ? 'opacity-50 cursor-not-allowed bg-gray-50' : 'hover:shadow-md cursor-pointer hover:border-blue-400'}`} onClick={() => !inTeam && addMember(hero)}>
                   {hero.image_url ? (
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`}
+                    src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
                     alt={hero.name} 
                     className="w-16 h-16 rounded-full object-cover mb-2" />
                   ) : (
@@ -183,7 +183,7 @@ function TeamDetails() {
               <div key={hero.id} className="border rounded-lg p-3 flex items-center justify-between bg-gray-50 hover:border-blue-300 transition-colors">
                 <div className="flex items-center gap-3 overflow-hidden">
                   {hero.image_url ? (
-                    <img src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`} alt={hero.name} className="w-12 h-12 rounded-full object-cover bg-gray-200 shrink-0" />
+                    <img src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`} alt={hero.name} className="w-12 h-12 rounded-full object-cover bg-gray-200 shrink-0" />
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-400 shrink-0">?</div>
                   )}

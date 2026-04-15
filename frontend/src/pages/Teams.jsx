@@ -295,7 +295,7 @@ function Teams() {
       )}
       {hero.image_url ? (
         <img 
-          src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`} 
+          src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`} 
           alt={hero.name} 
           className="w-10 h-10 rounded object-cover bg-gray-200 shrink-0" 
         />
@@ -542,7 +542,7 @@ function Teams() {
                     <div className="flex items-center gap-3 overflow-hidden">
                       {hero.image_url ? (
                         <img 
-                          src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`}
+                          src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
                           alt={hero.name} 
                           className="w-10 h-10 rounded-full object-cover bg-gray-200 shrink-0" />
                       ) : (
@@ -696,7 +696,7 @@ function Teams() {
                     m.superhero_details?.image_url ? (
                       <img 
                         key={m.id} 
-                        src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${m.superhero_details.image_url}`}
+                        src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${m.superhero_details.image_url}`}
                         alt={m.superhero_details?.name || m.superhero_name}
                         className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 object-cover"
                       />
