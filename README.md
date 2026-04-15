@@ -38,9 +38,13 @@ A full-stack web application that allows users to explore superheroes, view deta
    ```bash
    pip install -r requirements.txt
    ```
-5. Create a `.env` file in the `backend` directory and add your Superhero API token:
+5. Create a `.env` file in the `backend` directory (you can copy from `.env.example`) and configure your variables:
    ```env
-   SUPERHERO_API_TOKEN=your_api_token_here
+   SUPERHERO_API_TOKEN="your_api_token_here"
+   DEBUG=True
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   CORS_ALLOWED_ORIGINS=http://localhost:5173
+   SECRET_KEY=your_django_secret_key_here
    ```
 6. Run the automated startup script:
    ```bash
@@ -55,10 +59,28 @@ A full-stack web application that allows users to explore superheroes, view deta
    ```bash
    npm install
    ```
-3. Start the Vite development server:
+3. Create a `.env` file in the `frontend` directory (you can copy from `.env.example`) to set the API base URL:
+   ```env
+   VITE_API_BASE_URL=http://localhost:8001/api
+   ```
+4. Start the Vite development server:
    ```bash
    npm run dev
    ```
+
+### Deployment (AWS EC2)
+This project includes an automated `deploy.sh` script to streamline pushing updates to a production Linux server (e.g., AWS EC2) running Nginx and Gunicorn.
+
+1. Ensure your server environment is configured correctly. In your production `.env` files, make sure to:
+   - Set `DEBUG=False` in `backend/.env`.
+   - Update `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` to include your EC2 public IP or domain.
+   - Update `VITE_API_BASE_URL` in `frontend/.env.production` to point to your server's public IP.
+2. Run the deployment script from the project root:
+   ```bash
+   chmod +x deploy.sh
+   ./deploy.sh
+   ```
+   *Note: This script will pull the latest code, install backend/frontend dependencies, run migrations, build the React app, and restart Gunicorn and Nginx automatically.*
 
 ## Core Logic Explanations
 
