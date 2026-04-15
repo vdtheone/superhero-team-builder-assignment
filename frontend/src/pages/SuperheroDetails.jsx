@@ -170,7 +170,7 @@ function SuperheroDetails() {
           {hero.image_url && (
             <div className="shrink-0">
               <img 
-                src={`http://13.235.67.104/api/heroes/image-proxy/?url=${hero.image_url}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`}
                 alt={hero.name} 
                 className="w-full max-w-sm h-auto rounded-lg shadow-md bg-gray-200"
               />

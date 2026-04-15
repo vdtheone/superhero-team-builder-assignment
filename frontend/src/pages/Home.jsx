@@ -170,7 +170,7 @@ function Home() {
                 >
                   {hero.image_url ? (
                     <img
-                      src={`http://13.235.67.104/api/heroes/image-proxy/?url=${hero.image_url}`}
+                      src={`${import.meta.env.VITE_API_BASE_URL}/heroes/image-proxy/?url=${hero.image_url}`}
                       alt={hero.name}
                       className="w-full h-48 object-cover bg-gray-200"
                     />
