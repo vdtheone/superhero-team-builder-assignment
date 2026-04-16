@@ -283,8 +283,8 @@ function SuperheroDetails() {
                 <div className="flex justify-between py-1 border-b border-gray-100"><span className="text-gray-500">Full Name</span> <span className="font-medium text-right">{hero.full_name || 'N/A'}</span></div>
                 <div className="flex justify-between py-1 border-b border-gray-100"><span className="text-gray-500">Alignment</span> <span className={`font-medium capitalize px-2 py-0.5 rounded-full text-xs ${hero.alignment === 'good' ? 'bg-green-100 text-green-800' : hero.alignment === 'bad' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'}`}>{hero.alignment || 'N/A'}</span></div>
                 <div className="flex justify-between py-1 border-b border-gray-100"><span className="text-gray-500">Publisher</span> <span className="font-medium text-right">{hero.publisher || 'N/A'}</span></div>
-                <div className="flex justify-between py-1 border-b border-gray-100"><span className="text-gray-500">First Appearance</span> <span className="font-medium text-right">{hero.first_appearance || 'N/A'}</span></div>
-                <div className="flex justify-between py-1 border-b border-gray-100 sm:col-span-2"><span className="text-gray-500">Place of Birth</span> <span className="font-medium text-right">{hero.place_of_birth || 'N/A'}</span></div>
+                <div className="flex justify-between py-1 border-b border-gray-100"><span className="text-gray-500">Place of Birth</span> <span className="font-medium text-right">{hero.place_of_birth || 'N/A'}</span></div>
+                <div className="flex justify-between py-1 border-b border-gray-100 sm:col-span-2"><span className="text-gray-500">First Appearance</span> <span className="font-medium text-right">{hero.first_appearance || 'N/A'}</span></div>
               </div>
             </div>
 
