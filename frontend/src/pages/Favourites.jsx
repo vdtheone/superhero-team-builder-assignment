@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useNotification } from "../services/NotificationContext";
 import HeroImage from "../components/HeroImage";
+import Pagination from "../components/Pagination";
 
 function Favourites() {
   const [favourites, setFavourites] = useState([]);
@@ -197,51 +198,16 @@ function Favourites() {
             })}
           </div>
           
-          {totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row justify-center items-center mt-10 gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Items per page:</span>
-                <select
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setPage(1);
-                  }}
-                  className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-blue-500 bg-white text-sm"
-                >
-                  <option value={12}>12</option>
-                  <option value={20}>20</option>
-                  <option value={32}>32</option>
-                </select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                  Previous
-                </button>
-                <span className="text-gray-700 font-medium text-sm">
-                  Page {page} of {totalPages}
-                </span>
-                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                  Next
-                </button>
-              </div>
-
-              <form onSubmit={handleJumpToPage} className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Go to page:</span>
-                <input
-                  type="number"
-                  value={jumpToPage}
-                  onChange={(e) => setJumpToPage(e.target.value)}
-                  onBlur={() => { if (jumpToPage === '') setJumpToPage(page.toString()) }}
-                  className="w-16 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500"
-                  min="1"
-                  max={totalPages}
-                />
-                <button type="submit" className="px-3 py-1 border rounded bg-white hover:bg-gray-50 text-sm">Go</button>
-              </form>
-            </div>
-          )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            setPage={setPage}
+            setPageSize={setPageSize}
+            jumpToPage={jumpToPage}
+            setJumpToPage={setJumpToPage}
+            handleJumpToPage={handleJumpToPage}
+          />
         </>
       )}
     </div>
