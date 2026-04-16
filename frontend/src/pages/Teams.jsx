@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useNotification } from "../services/NotificationContext";
 import { Link } from "react-router-dom";
+import HeroImage from "../components/HeroImage";
 
 // --- Icons (Simple SVGs) ---
 const Icons = {
@@ -289,19 +290,30 @@ function Teams() {
       className="group relative cursor-pointer border rounded-lg p-2 hover:border-blue-400 hover:shadow-md transition-all bg-gray-50 flex items-center gap-3"
     >
       {isHeroFavorite(hero.id) && activeTab !== "favourites" && (
-        <div className="absolute -top-1.5 -left-1.5 bg-yellow-400 text-white rounded-full p-0.5 shadow-sm z-10" title="Favourite Hero">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <div
+          className="absolute -top-2 -left-2 bg-red-500 text-white rounded-full p-1 shadow-md z-10 flex items-center justify-center"
+          title="Favourite Hero"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-3 h-3"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                    2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56 
+                    C11.09 5.01 12.76 4 14.5 4 
+                    17 4 19 6 19 8.5 
+                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
         </div>
       )}
-      {hero.image_url ? (
-        <img 
-          src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`} 
-          alt={hero.name} 
-          className="w-10 h-10 rounded object-cover bg-gray-200 shrink-0" 
-        />
-      ) : (
-        <div className="w-10 h-10 rounded bg-gray-200 flex items-center justify-center text-gray-400 font-bold shrink-0">?</div>
-      )}
+      <HeroImage 
+        name={hero.name} 
+        imageUrl={hero.image_url} 
+        className="w-10 h-10 rounded object-cover bg-gray-200 shrink-0" 
+        textClass="text-base"
+      />
       <div className="overflow-hidden flex-1">
         <p className="font-bold text-sm truncate">{hero.name}</p>
         <p className="text-xs text-gray-500">Pow: {getHeroPower(hero)}</p>
@@ -540,14 +552,12 @@ function Teams() {
                 slot.team.map(hero => (
                   <div key={hero.id} className="flex justify-between items-center bg-white p-2 rounded shadow-sm border">
                     <div className="flex items-center gap-3 overflow-hidden">
-                      {hero.image_url ? (
-                        <img 
-                          src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
-                          alt={hero.name} 
-                          className="w-10 h-10 rounded-full object-cover bg-gray-200 shrink-0" />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-400 shrink-0">?</div>
-                      )}
+                      <HeroImage 
+                        name={hero.name} 
+                        imageUrl={hero.image_url} 
+                        className="w-10 h-10 rounded-full object-cover bg-gray-200 shrink-0" 
+                        textClass="text-base"
+                      />
                       <span className="font-medium text-sm truncate">{hero.name}</span>
                     </div>
                     
@@ -693,16 +703,13 @@ function Teams() {
                 
                 <div className="flex -space-x-2 overflow-hidden mb-4 py-1">
                   {team.members.slice(0, 5).map(m => (
-                    m.superhero_details?.image_url ? (
-                      <img 
-                        key={m.id} 
-                        src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${m.superhero_details.image_url}`}
-                        alt={m.superhero_details?.name || m.superhero_name}
-                        className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 object-cover"
-                      />
-                    ) : (
-                      <div key={m.id} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-400 shrink-0">?</div>
-                    )
+                    <HeroImage 
+                      key={m.id}
+                      name={m.superhero_details?.name || m.superhero_name} 
+                      imageUrl={m.superhero_details?.image_url} 
+                      className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 object-cover" 
+                      textClass="text-xs"
+                    />
                   ))}
                   {team.members.length > 5 && (
                     <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs text-gray-500 font-bold">

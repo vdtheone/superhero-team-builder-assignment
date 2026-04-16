@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../services/AuthContext";
 import { useNotification } from "../services/NotificationContext";
+import HeroImage from "../components/HeroImage";
+import { Heart } from "lucide-react";
 
 function Home() {
 
@@ -16,6 +18,8 @@ function Home() {
   const { user } = useAuth();
   const { showNotification } = useNotification();
   const [favouritesMap, setFavouritesMap] = useState({});
+  const [pageSize, setPageSize] = useState(12);
+  const [jumpToPage, setJumpToPage] = useState("1");
 
   // Debounce Search
   useEffect(() => {
@@ -28,7 +32,12 @@ function Home() {
 
   useEffect(() => {
     fetchHeroes();
-  }, [debouncedSearch, ordering, page]);
+  }, [debouncedSearch, ordering, page, pageSize]);
+
+  // Sync jump to page input with current page
+  useEffect(() => {
+    setJumpToPage(page.toString());
+  }, [page]);
 
   // Fetch User's Favourites
   useEffect(() => {
@@ -59,7 +68,7 @@ function Home() {
       search: debouncedSearch,
       ordering: ordering,
       page: page,
-      page_size: 12
+      page_size: pageSize
     });
 
     api.get(`/heroes/?${params.toString()}`)
@@ -67,7 +76,7 @@ function Home() {
         if (res.data.results) {
           // Paginated response
           setHeroes(res.data.results);
-          setTotalPages(Math.ceil(res.data.count / 12));
+          setTotalPages(Math.ceil(res.data.count / pageSize));
         } else {
           // Fallback for non-paginated response
           setHeroes(res.data);
@@ -117,10 +126,14 @@ function Home() {
     setOrdering(e.target.value);
     setPage(1);
   };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
+  
+  const handleJumpToPage = (e) => {
+    e.preventDefault();
+    const newPage = parseInt(jumpToPage, 10);
+    if (!isNaN(newPage) && newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
+    } else {
+      setJumpToPage(page.toString());
     }
   };
 
@@ -168,7 +181,7 @@ function Home() {
                   to={`/hero/${hero.id}`}
                   className="bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-xl transition-all border border-gray-100 flex flex-col h-full"
                 >
-                  {hero.image_url ? (
+                  {/* {hero.image_url ? (
                     <img
                       src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${encodeURIComponent(hero.image_url)}`}
                       alt={hero.name}
@@ -176,7 +189,13 @@ function Home() {
                     />
                   ) : (
                     <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400 font-bold text-xl">?</div>
-                  )}
+                  )} */}
+
+                  <HeroImage 
+                    name={hero.name} 
+                    imageUrl={hero.image_url} 
+                    className="w-full h-48 object-cover" 
+                  />
 
                   <div className="p-4 flex-1 flex flex-col justify-between">
                     <div>
@@ -185,18 +204,26 @@ function Home() {
                         {user && (
                           <button
                             onClick={(e) => toggleFavourite(e, hero)}
-                            className={`focus:outline-none transition-colors ${favouritesMap[hero.id] ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 hover:text-yellow-400'}`}
-                            title={favouritesMap[hero.id] ? "Remove from Favourites" : "Add to Favourites"}
+                            className={`focus:outline-none transition-all duration-300 transform hover:scale-110
+                              ${
+                                favouritesMap[hero.id]
+                                  ? "text-red-500"
+                                  : "text-gray-300 hover:text-red-400"
+                              }
+                            `}
+                            title={
+                              favouritesMap[hero.id]
+                                ? "Remove from Favourites"
+                                : "Add to Favourites"
+                            }
                           >
-                            {favouritesMap[hero.id] ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ) : (
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                              </svg>
-                            )}
+                            <Heart
+                              className={`h-6 w-6 transition-all duration-300 ${
+                                favouritesMap[hero.id]
+                                  ? "fill-current scale-110"
+                                  : "scale-100"
+                              }`}
+                            />
                           </button>
                         )}
                       </div>
@@ -229,24 +256,48 @@ function Home() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-10 gap-4">
-              <button
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
-                className="px-4 py-2 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              <span className="text-gray-700 font-medium">
-                Page {page} of {totalPages}
-              </span>
-              <button
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page === totalPages}
-                className="px-4 py-2 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-10 gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Items per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value={12}>12</option>
+                  <option value={20}>20</option>
+                  <option value={32}>32</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Previous
+                </button>
+                <span className="text-gray-700 font-medium text-sm">
+                  Page {page} of {totalPages}
+                </span>
+                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Next
+                </button>
+              </div>
+
+              <form onSubmit={handleJumpToPage} className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Go to page:</span>
+                <input
+                  type="number"
+                  value={jumpToPage}
+                  onChange={(e) => setJumpToPage(e.target.value)}
+                  onBlur={() => { if (jumpToPage === '') setJumpToPage(page.toString()) }}
+                  className="w-16 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500"
+                  min="1"
+                  max={totalPages}
+                />
+                <button type="submit" className="px-3 py-1 border rounded bg-white hover:bg-gray-50 text-sm">Go</button>
+              </form>
             </div>
           )}
         </>

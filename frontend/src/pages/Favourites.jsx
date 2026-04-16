@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useNotification } from "../services/NotificationContext";
+import HeroImage from "../components/HeroImage";
 
 function Favourites() {
   const [favourites, setFavourites] = useState([]);
@@ -14,6 +15,8 @@ function Favourites() {
   const [ordering, setOrdering] = useState("-created_at");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+  const [jumpToPage, setJumpToPage] = useState("1");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -30,13 +33,17 @@ function Favourites() {
   }, []);
 
   useEffect(() => {
+    setJumpToPage(page.toString());
+  }, [page]);
+
+  useEffect(() => {
     setLoading(true);
-    const params = new URLSearchParams({ search: debouncedSearch, ordering, page, page_size: 12 });
+    const params = new URLSearchParams({ search: debouncedSearch, ordering, page, page_size: pageSize });
     
     api.get(`/favourites/?${params.toString()}`)
       .then((res) => {
         setFavourites(res.data.results || res.data);
-        if (res.data.count) setTotalPages(Math.ceil(res.data.count / 12));
+        if (res.data.count) setTotalPages(Math.ceil(res.data.count / pageSize));
         else setTotalPages(1);
         setLoading(false);
       })
@@ -44,7 +51,7 @@ function Favourites() {
         console.error(err);
         setLoading(false);
       });
-  }, [debouncedSearch, ordering, page]);
+  }, [debouncedSearch, ordering, page, pageSize]);
 
   const removeFavourite = (e, favId, heroName) => {
     e.preventDefault();
@@ -58,6 +65,16 @@ function Favourites() {
         console.error(err);
         showNotification("Failed to remove favourite.", "error");
       });
+  };
+
+  const handleJumpToPage = (e) => {
+    e.preventDefault();
+    const newPage = parseInt(jumpToPage, 10);
+    if (!isNaN(newPage) && newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    } else {
+      setJumpToPage(page.toString());
+    }
   };
 
   return (
@@ -120,15 +137,11 @@ function Favourites() {
                   to={`/hero/${fav.superhero}`}
                   className="bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-xl transition-all border border-gray-100 flex flex-col h-full group relative"
                 >
-                  {hero?.image_url ? (
-                    <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
-                      alt={heroName}
-                      className="w-full h-48 object-cover bg-gray-200"
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400 font-bold text-xl">?</div>
-                  )}
+                  <HeroImage 
+                    name={heroName} 
+                    imageUrl={hero?.image_url} 
+                    className="w-full h-48 object-cover bg-gray-200" 
+                  />
                   
                   <button
                     onClick={(e) => removeFavourite(e, fav.id, heroName)}
@@ -185,24 +198,48 @@ function Favourites() {
           </div>
           
           {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-10 gap-4">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-4 py-2 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              <span className="text-gray-700 font-medium">
-                Page {page} of {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-4 py-2 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-10 gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Items per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value={12}>12</option>
+                  <option value={20}>20</option>
+                  <option value={32}>32</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Previous
+                </button>
+                <span className="text-gray-700 font-medium text-sm">
+                  Page {page} of {totalPages}
+                </span>
+                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Next
+                </button>
+              </div>
+
+              <form onSubmit={handleJumpToPage} className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Go to page:</span>
+                <input
+                  type="number"
+                  value={jumpToPage}
+                  onChange={(e) => setJumpToPage(e.target.value)}
+                  onBlur={() => { if (jumpToPage === '') setJumpToPage(page.toString()) }}
+                  className="w-16 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500"
+                  min="1"
+                  max={totalPages}
+                />
+                <button type="submit" className="px-3 py-1 border rounded bg-white hover:bg-gray-50 text-sm">Go</button>
+              </form>
             </div>
           )}
         </>

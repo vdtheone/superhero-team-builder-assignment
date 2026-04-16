@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useNotification } from "../services/NotificationContext";
+import HeroImage from "../components/HeroImage";
 
 const Icons = {
   Trash2: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>,
@@ -144,14 +145,12 @@ function TeamDetails() {
               const inTeam = members.some(m => m.id === hero.id);
               return (
                 <div key={hero.id} className={`border rounded-lg p-3 flex flex-col items-center text-center transition-all ${inTeam ? 'opacity-50 cursor-not-allowed bg-gray-50' : 'hover:shadow-md cursor-pointer hover:border-blue-400'}`} onClick={() => !inTeam && addMember(hero)}>
-                  {hero.image_url ? (
-                    <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`}
-                    alt={hero.name} 
-                    className="w-16 h-16 rounded-full object-cover mb-2" />
-                  ) : (
-                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-400 mb-2">?</div>
-                  )}
+                  <HeroImage 
+                    name={hero.name} 
+                    imageUrl={hero.image_url} 
+                    className="w-16 h-16 rounded-full object-cover mb-2" 
+                    textClass="text-2xl"
+                  />
                   <h3 className="font-bold text-sm truncate w-full">{hero.name}</h3>
                   <p className="text-xs text-gray-500 mb-2">Pow: {getHeroPower(hero)}</p>
                   
@@ -182,11 +181,12 @@ function TeamDetails() {
             members.map(hero => (
               <div key={hero.id} className="border rounded-lg p-3 flex items-center justify-between bg-gray-50 hover:border-blue-300 transition-colors">
                 <div className="flex items-center gap-3 overflow-hidden">
-                  {hero.image_url ? (
-                    <img src={`${import.meta.env.VITE_API_BASE_URL}/api/heroes/image-proxy/?url=${hero.image_url}`} alt={hero.name} className="w-12 h-12 rounded-full object-cover bg-gray-200 shrink-0" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-400 shrink-0">?</div>
-                  )}
+                  <HeroImage 
+                    name={hero.name} 
+                    imageUrl={hero.image_url} 
+                    className="w-12 h-12 rounded-full object-cover bg-gray-200 shrink-0" 
+                    textClass="text-lg"
+                  />
                   <div className="overflow-hidden">
                     <p className="font-bold text-sm truncate">{hero.name}</p>
                     <p className="text-xs text-gray-500">Power: {getHeroPower(hero)}</p>
